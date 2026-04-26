@@ -40,7 +40,8 @@ jobs:
               docker compose down;
               docker compose pull;
               docker compose up -d;
-              docker ps
+              Start-Sleep -Seconds 5;
+              docker ps -a;
             "
   # build-and-deploy:
   #   runs-on: windows-latest
