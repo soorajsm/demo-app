@@ -73,4 +73,3 @@ jobs:
       - name: Health Check
         run: |
           curl -f http://${{ secrets.EC2_HOST }}/api/health
-
