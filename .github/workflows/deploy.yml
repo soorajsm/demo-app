@@ -36,12 +36,21 @@ jobs:
           password: ${{ secrets.EC2_PASSWORD }}
           script: |
             powershell -Command "
-              cd C:\project;
-              docker compose down;
-              docker compose pull;
-              docker compose up -d;
-              Start-Sleep -Seconds 5;
-              docker ps -a;
+              \$ErrorActionPreference = 'Stop';
+
+              cd C:\project
+
+              Write-Host 'Running compose down'
+              docker compose down
+
+              Write-Host 'Running compose pull'
+              docker compose pull
+
+              Write-Host 'Running compose up'
+              docker compose up -d
+
+              Write-Host 'Checking containers'
+              docker ps -a
             "
   # build-and-deploy:
   #   runs-on: windows-latest
