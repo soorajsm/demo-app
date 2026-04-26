@@ -51,6 +51,10 @@ jobs:
     env:
       APP_URL: http://${{ secrets.EC2_HOST }}
 
+    environment:
+      name: production
+      url: ${{ env.APP_URL }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
