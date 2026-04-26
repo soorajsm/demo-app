@@ -1,0 +1,17 @@
+services:
+  backend:
+    image: sooraj2002/backend:latest
+    restart: always
+
+  frontend:
+    image: sooraj2002/frontend:latest
+    restart: always
+
+  nginx:
+    image: sooraj2002/nginx:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    restart: always
