@@ -44,32 +44,36 @@ jobs:
   #       docker push ${{ secrets.DOCKER_USERNAME }}/nginx:latest
 
 
-  deploy:
-    runs-on: ubuntu-latest
-    # needs: build
+deploy:
+  runs-on: ubuntu-latest
+  # needs: build
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  steps:
+    # Fetches the latest repository code for the workflow
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Copy configs to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          password: ${{ secrets.EC2_PASSWORD }}
-          source: "docker-compose.yml,nginx/nginx.conf"
-          target: "C:/project"
+      # Transfers docker-compose and nginx config files to the EC2 instance
+    - name: Copy configs to EC2
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        password: ${{ secrets.EC2_PASSWORD }}
+        source: "docker-compose.yml,nginx/nginx.conf"
+        target: "C:/project"
 
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          password: ${{ secrets.EC2_PASSWORD }}
-          script: |
-            cmd /c "cd C:\project && docker compose -f C:\project\docker-compose.yml down --remove-orphans && docker network prune -f && docker compose -f C:\project\docker-compose.yml up -d"
+      # Connects via SSH and recreates containers using Docker Compose
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        password: ${{ secrets.EC2_PASSWORD }}
+        script: |
+          cmd /c "cd C:\project && docker compose -f C:\project\docker-compose.yml down --remove-orphans && docker network prune -f && docker compose -f C:\project\docker-compose.yml up -d"
 
-      - name: Health Check
-        run: |
-          curl -f http://${{ secrets.EC2_HOST }}/api/health
+      # Verifies deployment by calling backend health endpoint
+    - name: Health Check
+      run: |
+        curl -f http://${{ secrets.EC2_HOST }}/api/health
