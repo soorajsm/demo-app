@@ -68,7 +68,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           script: |
-            cmd /c "cd C:\project && docker compose -f C:\project\docker-compose.yml pull && docker compose -f C:\project\docker-compose.yml up -d --remove-orphans && docker ps"
+            cmd /c "cd C:\project && docker compose -f C:\project\docker-compose.yml down --remove-orphans && docker network prune -f && docker compose -f C:\project\docker-compose.yml up -d"
 
       - name: Health Check
         run: |
