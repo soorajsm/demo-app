@@ -38,18 +38,10 @@ jobs:
             powershell -Command "
               \$ErrorActionPreference = 'Stop';
 
-              cd C:\project
+              docker compose -f C:\project\docker-compose.yml down
+              docker compose -f C:\project\docker-compose.yml pull
+              docker compose -f C:\project\docker-compose.yml up -d
 
-              Write-Host 'Running compose down'
-              docker compose down
-
-              Write-Host 'Running compose pull'
-              docker compose pull
-
-              Write-Host 'Running compose up'
-              docker compose up -d
-
-              Write-Host 'Checking containers'
               docker ps -a
             "
   # build-and-deploy:
