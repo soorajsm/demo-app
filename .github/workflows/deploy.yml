@@ -35,10 +35,13 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           script: |
-            cd C:\project
-            docker compose down
-            docker compose pull
-            docker compose up -d
+            powershell -Command "
+              cd C:\project;
+              docker compose down;
+              docker compose pull;
+              docker compose up -d;
+              docker ps
+            "
   # build-and-deploy:
   #   runs-on: windows-latest
 
