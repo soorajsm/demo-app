@@ -35,15 +35,11 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           password: ${{ secrets.EC2_PASSWORD }}
           script: |
-            powershell -Command "
-              \$ErrorActionPreference = 'Stop';
-
-              docker compose -f C:\project\docker-compose.yml down
-              docker compose -f C:\project\docker-compose.yml pull
-              docker compose -f C:\project\docker-compose.yml up -d
-
-              docker ps -a
-            "
+            cd C:\project
+            docker compose -f C:\project\docker-compose.yml down
+            docker compose -f C:\project\docker-compose.yml pull
+            docker compose -f C:\project\docker-compose.yml up -d
+            docker ps -a
   # build-and-deploy:
   #   runs-on: windows-latest
 
