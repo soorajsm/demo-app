@@ -1,11 +1,10 @@
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+FROM mcr.microsoft.com/windows/node:ltsc2022
 
 WORKDIR /app
-COPY index.html .
-COPY server.js .
+COPY . .
 
-RUN powershell -Command "Invoke-WebRequest https://nodejs.org/dist/v18.18.0/node-v18.18.0-x64.msi -OutFile node.msi; Start-Process msiexec.exe -ArgumentList '/i node.msi /quiet /norestart' -Wait"
+RUN npm install -g serve
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["serve", "-s", ".", "-l", "3000"]
